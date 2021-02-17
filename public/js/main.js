@@ -6,6 +6,8 @@ const WIRE_FRAME = true;
 const ANTI_ALIAS = true;
 const SHADOW_MAP = true;
 
+var cameraCarGroup;
+
 //objects,planes
 var gPlane;
 
@@ -13,7 +15,7 @@ var gPlane;
 var carPickupSpeed = 0.02;
 var carSpeed = 0;
 var carMaxSpeed = 1.8;
-var carReverseSpeed = 0.05;
+var carReverseSpeed = 0.06;
 
 //configs
 let configs = {
@@ -55,6 +57,14 @@ var models = {
   },
 };
 
+//fonts index
+var fonts={
+  optimerRegular:{
+    json:"../fonts/optimer_regular.typeface.json",
+    mesh:null,
+  },
+}
+
 // Meshes index
 var meshes = [];
 
@@ -91,23 +101,25 @@ function init() {
   renderer.setClearColor("#fed8b1");
   const aLight = new THREE.AmbientLight(0xffffff);
   scene.add(aLight);
-  const dLight = new THREE.DirectionalLight(0x404040); // soft white light
-  dLight.position.set(-1, 2, 1);
+  const dLight = new THREE.DirectionalLight(0xffffff,0.5); // soft white light
+  dLight.position.set(-1, 20, 0);
   scene.add(dLight);
 
+  cameraCarGroup=new THREE.Group();
+  cameraCarGroup.add(camera);
   //ground plane
-  var gPlaneGeometry = new THREE.PlaneGeometry(500, 2000, 800, 100);
-  var gPlaneMaterial = new THREE.MeshBasicMaterial({
+  var gPlaneGeometry = new THREE.PlaneGeometry(500, 2000, 4000, 100);
+  var gPlaneMaterial = new THREE.MeshStandardMaterial({
     color: 0xffffff,
     side: THREE.DoubleSide,
     wireframe: WIRE_FRAME,
   });
   gPlane = new THREE.Mesh(gPlaneGeometry, gPlaneMaterial);
   gPlane.rotation.set(Math.PI / 2, 0, 0);
+  gPlane.receiveShadow=true;
 
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.shadowMap.enabled = SHADOW_MAP;
-  renderer.shadowMap, (type = THREE.PCFSoftShadowMap);
   document.body.appendChild(renderer.domElement);
 
   for (var _key in models) {
@@ -134,6 +146,16 @@ function init() {
           models[key].mesh = mesh;
         });
       });
+    })(_key);
+  }
+
+  //font loader
+  for(var _key in fonts){
+    (function (key) {
+      const fontLoader = new THREE.FontLoader(loadingManager);
+      fontLoader.load(fonts[key].json, function (font) {
+        fonts[key].mesh=font;
+      });  
     })(_key);
   }
   camera.position.set(0, 1.7, 5);
@@ -166,9 +188,32 @@ function onResourcesLoad() {
   dxR = meshes["car"].rotation.x;
   dyR = meshes["car"].rotation.y;
   dzR = meshes["car"].rotation.z;
-  scene.add(meshes["car"]);
+  // scene.add(meshes["car"]);
+  cameraCarGroup.add(meshes["car"]);
+  scene.add(cameraCarGroup);
+
+  //construct txtMeshes
+  const txtgeometry = new THREE.TextGeometry(
+    "VANSSIGN",
+    {
+      font: fonts.optimerRegular.mesh,
+      size: 0.5,
+      height: 0.5,
+      curveSegments: 12,
+    }
+  );
+  var txt_mat = new THREE.MeshPhongMaterial({
+    color: 0xaaaaaa,
+    wireframe: false,
+  });
+  meshes["nameTxt"]= new THREE.Mesh(txtgeometry, txt_mat);
+  meshes["nameTxt"].position.set(2,0.25,-6);
+  meshes["nameTxt"].rotation.set(0,0,0);
+  meshes["nameTxt"].castShadow=true;
+  scene.add(meshes["nameTxt"]);
 }
 
+var carVector;
 function animate() {
   if (RESOURCES_LOADED == false) {
     requestAnimationFrame(animate);
@@ -176,6 +221,7 @@ function animate() {
     return;
   }
   requestAnimationFrame(animate);
+
   if (!drivingStatus) {
     if (meshes["car"]) meshes["car"].rotation.y -= 0.005;
     // Keyboard turn inputs
@@ -207,9 +253,8 @@ function animate() {
       scene.add(gPlane);
     }
     if (carSpeed < carMaxSpeed) carSpeed = carSpeed + carPickupSpeed;
-
-    meshes["car"].position.z -= carSpeed;
-    camera.position.z -= carSpeed;
+    cameraCarGroup.position.z -= carSpeed*(Math.cos(cameraCarGroup.rotation.y));
+    cameraCarGroup.position.x -=carSpeed*(Math.sin(cameraCarGroup.rotation.y));
   }
   if (keyboard[83]) {
     //S key
@@ -221,17 +266,17 @@ function animate() {
     }
     
     carSpeed = 0;
-    meshes["car"].position.z += carReverseSpeed;
-    camera.position.z += carReverseSpeed;
+    cameraCarGroup.position.z += carReverseSpeed*(Math.cos(cameraCarGroup.rotation.y));
+    cameraCarGroup.position.x +=carReverseSpeed*(Math.sin(cameraCarGroup.rotation.y));
   }
   if (drivingStatus && (keyboard[83] || keyboard[87])) {
     if (keyboard[68]) {
       //D key
-      meshes["car"].position.x += 0.1;
+      cameraCarGroup.rotation.y-=0.02
     }
     if (keyboard[65]) {
       //A key
-      meshes["car"].position.x -= 0.1;
+      cameraCarGroup.rotation.y+=0.02
     }
   }
   if (drivingStatus) {
