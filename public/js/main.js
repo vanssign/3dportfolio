@@ -2,7 +2,7 @@ let scene, camera, renderer;
 
 let keyboard = [];
 
-const WIRE_FRAME = true;
+const WIRE_FRAME = false;
 const ANTI_ALIAS = true;
 const SHADOW_MAP = true;
 
@@ -55,6 +55,130 @@ var fonts = {
   },
 };
 
+//txt Objects
+var txtObjects = {
+  skills:{
+    text:"SKILLS",
+    size: 1,
+    height: 0.25,
+    color: 0xeeeeee,
+    position: {
+      x: -5.5,
+      y: 0.25,
+      z: -7,
+    },
+    rotation: {
+      x: 0,
+      y: Math.PI/7,
+      z: 0,
+    },
+  },
+  react:{
+    text:"REACTJS",
+    size: 0.5,
+    height: 0.25,
+    color: 0xaaaaaa,
+    position: {
+      x: -5,
+      y: 0.25,
+      z: -12,
+    },
+    rotation: {
+      x: 0,
+      y: Math.PI/7,
+      z: 0,
+    }
+  },
+  node:{
+    text:"NODEJS",
+    size: 0.5,
+    height: 0.25,
+    color: 0xaaaaaa,
+    position: {
+      x: -5,
+      y: 0.25,
+      z: -15,
+    },
+    rotation: {
+      x: 0,
+      y: Math.PI/7,
+      z: 0,
+    }
+  },
+  three:{
+    text:"THREEJS",
+    size: 0.5,
+    height: 0.25,
+    color: 0xaaaaaa,
+    position: {
+      x: -5,
+      y: 0.25,
+      z: -18,
+    },
+    rotation: {
+      x: 0,
+      y: Math.PI/7,
+      z: 0,
+    }
+  },
+  mongodb:{
+    text:"MONGODB",
+    size: 0.5,
+    height: 0.25,
+    color: 0xffffff,
+    position: {
+      x: -5.5,
+      y: 0.25,
+      z: -21,
+    },
+    rotation: {
+      x: 0,
+      y: Math.PI/7,
+      z: 0,
+    }
+  },
+};
+
+//Model objects
+var modelObjects = {
+  tree0: {
+    model: "tree",
+    scale: {
+      x: 0.1,
+      y: 0.1,
+      z: 0.1,
+    },
+    position: {
+      x: 4,
+      y: 1,
+      z: -6,
+    },
+    rotation: {
+      x: 0,
+      y: 0,
+      z: 0,
+    },
+  },
+  tree1: {
+    model: "tree",
+    scale: {
+      x: 0.1,
+      y: 0.1,
+      z: 0.1,
+    },
+    position: {
+      x: -7,
+      y: 1,
+      z: -50,
+    },
+    rotation: {
+      x: 0,
+      y: Math.PI / 3,
+      z: 0,
+    },
+  },
+};
+
 // Meshes index
 var meshes = [];
 
@@ -69,7 +193,7 @@ let loadingScreen = {
   ),
   box: new THREE.Mesh(
     new THREE.BoxGeometry(10, 0.5, 0, 5),
-    new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: WIRE_FRAME })
+    new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: false })
   ),
 };
 let loadingManager = null;
@@ -94,7 +218,12 @@ function init() {
   loadingManager = new THREE.LoadingManager();
 
   loadingManager.onProgress = function (item, loaded, total) {
-    console.log(item, loaded, total);
+    //loading sceen on progress
+    loadingScreen.scene.remove(loadingScreen.box);
+    loadingScreen.box.position.x-=0.01;
+    loadingScreen.box.scale.x+=0.05;
+    console.log(loadingScreen.box);
+    loadingScreen.scene.add(loadingScreen.box)
   };
 
   loadingManager.onLoad = function () {
@@ -106,18 +235,21 @@ function init() {
 
   //kinda bg color
   renderer.setClearColor("#fed8b1");
-  const aLight = new THREE.AmbientLight(0xffffff);
+
+  //LIGHTS
+  const aLight = new THREE.AmbientLight(0xffffff, 0.9);
   scene.add(aLight);
-  const dLight = new THREE.DirectionalLight(0xffffff, 0.5); // soft white light
-  dLight.position.set(-1, 20, 0);
+  const dLight = new THREE.PointLight(0xffffff, 0.8);
+  dLight.position.set(30, 100, -10);
+  dLight.castShadow = true;
   scene.add(dLight);
 
   cameraCarGroup = new THREE.Group();
   cameraCarGroup.add(camera);
   //ground plane
   var gPlaneGeometry = new THREE.PlaneGeometry(200, 500, 400, 100);
-  var gPlaneMaterial = new THREE.MeshStandardMaterial({
-    color: 0xffffff,
+  var gPlaneMaterial = new THREE.MeshBasicMaterial({
+    color: 0xe6cfbf,
     side: THREE.DoubleSide,
     wireframe: WIRE_FRAME,
   });
@@ -139,17 +271,6 @@ function init() {
 
         objLoader.setMaterials(materials);
         objLoader.load(models[key].obj, function (mesh) {
-          mesh.traverse(function (node) {
-            if (node instanceof THREE.Mesh) {
-              if ("castShadow" in models[key])
-                node.castShadow = models[key].castShadow;
-              else node.castShadow = true;
-
-              if ("receiveShadow" in models[key])
-                node.receiveShadow = models[key].receiveShadow;
-              else node.receiveShadow = true;
-            }
-          });
           models[key].mesh = mesh;
         });
       });
@@ -171,12 +292,31 @@ var dxR, dyR, dzR;
 var dxP, dyP, dzP;
 let drivingStatus = false;
 function onResourcesLoad() {
-  // Clone models into meshes.
-  meshes["car"] = models.car.mesh.clone();
-  meshes["tree0"] = models.tree.mesh.clone();
-  meshes["tree1"] = models.tree.mesh.clone();
-  meshes["tree2"] = models.tree.mesh.clone();
+  //loop through modelObjects and construct meshes accordingly
+  for (let key in modelObjects) {
+    // Clone models into meshes.
+    meshes[key] = models[modelObjects[key].model].mesh.clone();
+    meshes[key].position.set(
+      modelObjects[key].position.x,
+      modelObjects[key].position.y,
+      modelObjects[key].position.z
+    );
+    meshes[key].scale.set(
+      modelObjects[key].scale.x,
+      modelObjects[key].scale.y,
+      modelObjects[key].scale.z
+    );
+    meshes[key].rotation.set(
+      modelObjects[key].rotation.x,
+      modelObjects[key].rotation.y,
+      modelObjects[key].rotation.z
+    );
+    meshes[key].castShadow = true;
+    scene.add(meshes[key]);
+  }
 
+  //car mesh construction
+  meshes["car"] = models.car.mesh.clone();
   meshes["car"].scale.set(0.5, 0.5, 0.5);
   meshes["car"].position.set(0, 1, 0);
   cameraCarGroup.add(meshes["car"]);
@@ -188,42 +328,38 @@ function onResourcesLoad() {
   dzP = cameraCarGroup.position.z;
   scene.add(cameraCarGroup);
 
-  meshes["tree0"].position.set(4, 1, -30);
-  meshes["tree0"].scale.set(0.8, 0.8, 0.8);
-  scene.add(meshes["tree0"]);
-
-  meshes["tree1"].position.set(-7, 1, -50);
-  meshes["tree1"].scale.set(0.3, 0.3, 0.3);
-  scene.add(meshes["tree1"]);
-
-  meshes["tree2"].position.set(-4, 1, -500);
-  meshes["tree2"].scale.set(0.2, 0.2, 0.2);
-  meshes["tree2"].rotation.set(0, Math.PI / 3, 0);
-  scene.add(meshes["tree2"]);
-
-  //construct txtMeshes
-  const txtgeometry = new THREE.TextGeometry("VANSSIGN", {
-    font: fonts.optimerRegular.mesh,
-    size: 0.5,
-    height: 0.5,
-    curveSegments: 12,
-  });
-  var txt_mat = new THREE.MeshPhongMaterial({
-    color: 0xaaaaaa,
-    wireframe: false,
-  });
-  meshes["nameTxt"] = new THREE.Mesh(txtgeometry, txt_mat);
-  meshes["nameTxt"].position.set(3, 0.25, -3);
-  meshes["nameTxt"].rotation.set(0, 0, 0);
-  meshes["nameTxt"].castShadow = true;
-  scene.add(meshes["nameTxt"]);
+  //construct txt meshes using font mesh and txtObject
+  for (let key in txtObjects) {
+    let txtgeometry = new THREE.TextGeometry(txtObjects[key].text, {
+      font: fonts.optimerRegular.mesh,
+      size: txtObjects[key].size,
+      height: txtObjects[key].height,
+    });
+    let txt_mat = new THREE.MeshPhongMaterial({
+      color: 0xeeeeee,
+      wireframe: false,
+    });
+    meshes[key] = new THREE.Mesh(txtgeometry, txt_mat);
+    meshes[key].position.set(
+      txtObjects[key].position.x,
+      txtObjects[key].position.y,
+      txtObjects[key].position.z
+    );
+    meshes[key].rotation.set(
+      txtObjects[key].rotation.x,
+      txtObjects[key].rotation.y,
+      txtObjects[key].rotation.z
+    );
+    meshes[key].castShadow = true;
+    scene.add(meshes[key]);
+  }
 }
 
 function animate() {
   if (RESOURCES_LOADED == false) {
     requestAnimationFrame(animate);
     renderer.render(loadingScreen.scene, loadingScreen.camera);
-    return;
+    return
   }
   requestAnimationFrame(animate);
 
@@ -285,6 +421,7 @@ function animate() {
       drivingStatus = !drivingStatus;
       scene.remove(gPlane);
       cameraCarGroup.position.set(dxP, dyP, dzP);
+      cameraCarGroup.rotation.y = dyR;
     }
   }
   renderer.render(scene, camera);
