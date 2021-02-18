@@ -12,10 +12,16 @@ var cameraCarGroup;
 var gPlane;
 
 //objects,planes properties
-var carPickupSpeed = 0.02;
+
+//CAR CONFIGS
+var carPickupSpeed = 0.01;
+var carBrakeSpeed = -0.01;
 var carSpeed = 0;
-var carMaxSpeed = 1.8;
-var carReverseSpeed = 0.06;
+var carMaxSpeed = 1.0;
+var carMaxReverseSpeed = -0.4;
+var carTurningAngle = 0.008;
+
+var groundFrictionSpeed = -0.008;
 
 //configs
 let configs = {
@@ -27,6 +33,32 @@ let configs = {
   },
 };
 
+// Models index
+var models = {
+  car: {
+    obj: "../models/Chevrolet_Camaro_SS_Low.obj",
+    mtl: "../models/Chevrolet_Camaro_SS_Low.mtl",
+    mesh: null,
+  },
+  tree: {
+    obj: "../models/low_poly_tree/Lowpoly_tree_sample.obj",
+    mtl: "../models/low_poly_tree/Lowpoly_tree_sample.mtl",
+    mesh: null,
+  },
+};
+
+//fonts index
+var fonts = {
+  optimerRegular: {
+    json: "../fonts/optimer_regular.typeface.json",
+    mesh: null,
+  },
+};
+
+// Meshes index
+var meshes = [];
+
+//loading
 let loadingScreen = {
   scene: new THREE.Scene(),
   camera: new THREE.PerspectiveCamera(
@@ -42,31 +74,6 @@ let loadingScreen = {
 };
 let loadingManager = null;
 let RESOURCES_LOADED = false;
-
-// Models index
-var models = {
-  car: {
-    obj: "../models/Chevrolet_Camaro_SS_High.obj",
-    mtl: "../models/Chevrolet_Camaro_SS_High.mtl",
-    mesh: null,
-  },
-  tree: {
-    obj: "../models/low_poly_tree/Lowpoly_tree_sample.obj",
-    mtl: "../models/low_poly_tree/Lowpoly_tree_sample.mtl",
-    mesh: null,
-  },
-};
-
-//fonts index
-var fonts={
-  optimerRegular:{
-    json:"../fonts/optimer_regular.typeface.json",
-    mesh:null,
-  },
-}
-
-// Meshes index
-var meshes = [];
 
 function init() {
   clock = new THREE.Clock();
@@ -101,14 +108,14 @@ function init() {
   renderer.setClearColor("#fed8b1");
   const aLight = new THREE.AmbientLight(0xffffff);
   scene.add(aLight);
-  const dLight = new THREE.DirectionalLight(0xffffff,0.5); // soft white light
+  const dLight = new THREE.DirectionalLight(0xffffff, 0.5); // soft white light
   dLight.position.set(-1, 20, 0);
   scene.add(dLight);
 
-  cameraCarGroup=new THREE.Group();
+  cameraCarGroup = new THREE.Group();
   cameraCarGroup.add(camera);
   //ground plane
-  var gPlaneGeometry = new THREE.PlaneGeometry(500, 2000, 4000, 100);
+  var gPlaneGeometry = new THREE.PlaneGeometry(200, 500, 400, 100);
   var gPlaneMaterial = new THREE.MeshStandardMaterial({
     color: 0xffffff,
     side: THREE.DoubleSide,
@@ -116,7 +123,7 @@ function init() {
   });
   gPlane = new THREE.Mesh(gPlaneGeometry, gPlaneMaterial);
   gPlane.rotation.set(Math.PI / 2, 0, 0);
-  gPlane.receiveShadow=true;
+  gPlane.receiveShadow = true;
 
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.shadowMap.enabled = SHADOW_MAP;
@@ -150,17 +157,18 @@ function init() {
   }
 
   //font loader
-  for(var _key in fonts){
+  for (var _key in fonts) {
     (function (key) {
       const fontLoader = new THREE.FontLoader(loadingManager);
       fontLoader.load(fonts[key].json, function (font) {
-        fonts[key].mesh=font;
-      });  
+        fonts[key].mesh = font;
+      });
     })(_key);
   }
-  camera.position.set(0, 1.7, 5);
+  camera.position.set(0, 1.5, 5);
 }
-var dxR, dxY, dxZ;
+var dxR, dyR, dzR;
+var dxP, dyP, dzP;
 let drivingStatus = false;
 function onResourcesLoad() {
   // Clone models into meshes.
@@ -171,6 +179,14 @@ function onResourcesLoad() {
 
   meshes["car"].scale.set(0.5, 0.5, 0.5);
   meshes["car"].position.set(0, 1, 0);
+  cameraCarGroup.add(meshes["car"]);
+  dxR = cameraCarGroup.rotation.x;
+  dyR = cameraCarGroup.rotation.y;
+  dzR = cameraCarGroup.rotation.z;
+  dxP = cameraCarGroup.position.x;
+  dyP = cameraCarGroup.position.y;
+  dzP = cameraCarGroup.position.z;
+  scene.add(cameraCarGroup);
 
   meshes["tree0"].position.set(4, 1, -30);
   meshes["tree0"].scale.set(0.8, 0.8, 0.8);
@@ -185,35 +201,24 @@ function onResourcesLoad() {
   meshes["tree2"].rotation.set(0, Math.PI / 3, 0);
   scene.add(meshes["tree2"]);
 
-  dxR = meshes["car"].rotation.x;
-  dyR = meshes["car"].rotation.y;
-  dzR = meshes["car"].rotation.z;
-  // scene.add(meshes["car"]);
-  cameraCarGroup.add(meshes["car"]);
-  scene.add(cameraCarGroup);
-
   //construct txtMeshes
-  const txtgeometry = new THREE.TextGeometry(
-    "VANSSIGN",
-    {
-      font: fonts.optimerRegular.mesh,
-      size: 0.5,
-      height: 0.5,
-      curveSegments: 12,
-    }
-  );
+  const txtgeometry = new THREE.TextGeometry("VANSSIGN", {
+    font: fonts.optimerRegular.mesh,
+    size: 0.5,
+    height: 0.5,
+    curveSegments: 12,
+  });
   var txt_mat = new THREE.MeshPhongMaterial({
     color: 0xaaaaaa,
     wireframe: false,
   });
-  meshes["nameTxt"]= new THREE.Mesh(txtgeometry, txt_mat);
-  meshes["nameTxt"].position.set(2,0.25,-6);
-  meshes["nameTxt"].rotation.set(0,0,0);
-  meshes["nameTxt"].castShadow=true;
+  meshes["nameTxt"] = new THREE.Mesh(txtgeometry, txt_mat);
+  meshes["nameTxt"].position.set(3, 0.25, -3);
+  meshes["nameTxt"].rotation.set(0, 0, 0);
+  meshes["nameTxt"].castShadow = true;
   scene.add(meshes["nameTxt"]);
 }
 
-var carVector;
 function animate() {
   if (RESOURCES_LOADED == false) {
     requestAnimationFrame(animate);
@@ -244,46 +249,42 @@ function animate() {
     }
   }
 
-  if (keyboard[87]) {
-    //W key
+  if (keyboard[87] || keyboard[83]) {
     if (!drivingStatus) {
       drivingStatus = true;
       meshes["car"].rotation.x = dxR;
       meshes["car"].rotation.y = dyR + Math.PI;
       scene.add(gPlane);
     }
-    if (carSpeed < carMaxSpeed) carSpeed = carSpeed + carPickupSpeed;
-    cameraCarGroup.position.z -= carSpeed*(Math.cos(cameraCarGroup.rotation.y));
-    cameraCarGroup.position.x -=carSpeed*(Math.sin(cameraCarGroup.rotation.y));
-  }
-  if (keyboard[83]) {
-    //S key
-    if (!drivingStatus) {
-      drivingStatus = true;
-      meshes["car"].rotation.x = dxR;
-      meshes["car"].rotation.y = dyR + Math.PI;
-      scene.add(gPlane);
+    if (keyboard[87]) {
+      //W key
+      if (carSpeed < carMaxSpeed) carSpeed = carSpeed + carPickupSpeed;
     }
-    
-    carSpeed = 0;
-    cameraCarGroup.position.z += carReverseSpeed*(Math.cos(cameraCarGroup.rotation.y));
-    cameraCarGroup.position.x +=carReverseSpeed*(Math.sin(cameraCarGroup.rotation.y));
-  }
-  if (drivingStatus && (keyboard[83] || keyboard[87])) {
+    if (keyboard[83]) {
+      //S key
+      if (carSpeed > carMaxReverseSpeed) carSpeed = carSpeed + carBrakeSpeed;
+    }
     if (keyboard[68]) {
       //D key
-      cameraCarGroup.rotation.y-=0.02
+      cameraCarGroup.rotation.y -= carTurningAngle;
     }
     if (keyboard[65]) {
       //A key
-      cameraCarGroup.rotation.y+=0.02
+      cameraCarGroup.rotation.y += carTurningAngle;
     }
   }
-  if (drivingStatus) {
-    if (keyboard[82]) {
-      //R key to reset
+  if (carSpeed > 0) carSpeed = carSpeed + groundFrictionSpeed;
+  if (carSpeed < 0) carSpeed = carSpeed - groundFrictionSpeed;
+  cameraCarGroup.position.z -= carSpeed * Math.cos(cameraCarGroup.rotation.y);
+  cameraCarGroup.position.x -= carSpeed * Math.sin(cameraCarGroup.rotation.y);
+
+  if (keyboard[82]) {
+    //R key to reset
+    if (drivingStatus) {
+      carSpeed = 0;
       drivingStatus = !drivingStatus;
       scene.remove(gPlane);
+      cameraCarGroup.position.set(dxP, dyP, dzP);
     }
   }
   renderer.render(scene, camera);
