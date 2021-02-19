@@ -5,6 +5,7 @@ let keyboard = [];
 const WIRE_FRAME = false;
 const ANTI_ALIAS = true;
 const SHADOW_MAP = true;
+const ALPHA=true;
 
 var cameraCarGroup;
 
@@ -45,6 +46,11 @@ var models = {
     mtl: "../models/low_poly_tree/Lowpoly_tree_sample.mtl",
     mesh: null,
   },
+  woodenSign:{
+    obj:"../models/Wooden Sign by groch/Meshes/Wooden_Sign_LowPoly_OBJ.obj",
+    mtl:"../models/Wooden Sign by groch/Meshes/Wooden_Sign_LowPoly_OBJ.mtl",
+    mesh:null,
+  },
 };
 
 //fonts index
@@ -55,6 +61,8 @@ var fonts = {
   },
 };
 
+let skillProjectDistanceX=25;
+let desriptionTitleDistanceZ=8;
 //txt Objects
 var txtObjects = {
   skills:{
@@ -137,6 +145,90 @@ var txtObjects = {
       z: 0,
     }
   },
+  projects:{
+    text:"PROJECTS",
+    size: 1,
+    height: 0.25,
+    color: 0xeeeeee,
+    position: {
+      x: -5.5-skillProjectDistanceX,
+      y: 0.25,
+      z: -7,
+    },
+    rotation: {
+      x: 0,
+      y: Math.PI/7,
+      z: 0,
+    },
+  },
+  covisuals:{
+    text:"COVID VISUALS",
+    subtext:"A react PWA with redux\narchitecture for latest covid\nstats in form of graphs\n and latest news",
+    size: 0.5,
+    height: 0.25,
+    color: 0xaaaaaa,
+    position: {
+      x: -5-skillProjectDistanceX,
+      // y: 0.25+1+1+1+0.25,
+      y:0.25,
+      z: -12,
+    },
+    rotation: {
+      x: 0,
+      y: Math.PI/7,
+      z: 0,
+    },
+    url:"https://vanssign.github.io/covid-visuals/"
+  },
+  ushotify:{
+    text:"uShotify",
+    subtext:"",
+    size: 0.5,
+    height: 0.25,
+    color: 0xaaaaaa,
+    position: {
+      x: -5 -skillProjectDistanceX,
+      y: 0.25,
+      z: -15,
+    },
+    rotation: {
+      x: 0,
+      y: Math.PI/7,
+      z: 0,
+    }
+  },
+  thehealingartist:{
+    text:"THE HEALING ARTIST",
+    size: 0.5,
+    height: 0.25,
+    color: 0xaaaaaa,
+    position: {
+      x: -5-skillProjectDistanceX,
+      y: 0.25,
+      z: -18,
+    },
+    rotation: {
+      x: 0,
+      y: Math.PI/7,
+      z: 0,
+    }
+  },
+  tiptap:{
+    text:"TIPTAP",
+    size: 0.5,
+    height: 0.25,
+    color: 0xffffff,
+    position: {
+      x: -5.5-skillProjectDistanceX,
+      y: 0.25,
+      z: -21,
+    },
+    rotation: {
+      x: 0,
+      y: Math.PI/7,
+      z: 0,
+    }
+  },
 };
 
 //Model objects
@@ -150,7 +242,7 @@ var modelObjects = {
     },
     position: {
       x: 4,
-      y: 1,
+      y: 0,
       z: -6,
     },
     rotation: {
@@ -168,7 +260,7 @@ var modelObjects = {
     },
     position: {
       x: -7,
-      y: 1,
+      y: 0,
       z: -50,
     },
     rotation: {
@@ -177,7 +269,110 @@ var modelObjects = {
       z: 0,
     },
   },
+  tree2: {
+    model: "tree",
+    scale: {
+      x: 0.4,
+      y: 0.4,
+      z: 0.4,
+    },
+    position: {
+      x: 7,
+      y: 0,
+      z: -25,
+    },
+    rotation: {
+      x: 0,
+      y: Math.PI / 7,
+      z: 0,
+    },
+  },
+  tree3: {
+    model: "tree",
+    scale: {
+      x: 0.8,
+      y: 0.8,
+      z: 0.8,
+    },
+    position: {
+      x: -20,
+      y: 0,
+      z: -10,
+    },
+    rotation: {
+      x: 0,
+      y: Math.PI / 9,
+      z: 0,
+    },
+  },
+  tree4: {
+    model: "tree",
+    scale: {
+      x: 0.2,
+      y: 0.3,
+      z: 0.4,
+    },
+    position: {
+      x: -15,
+      y: 0,
+      z: -18,
+    },
+    rotation: {
+      x: 0,
+      y: Math.PI / 3,
+      z: 0,
+    },
+  },
+  woodenSign0: {
+    model: "woodenSign",
+    scale: {
+      x: 1.5,
+      y: 1.5,
+      z: 1.5,
+    },
+    position: {
+      x: -4,
+      y: 0,
+      z: -4,
+    },
+    rotation: {
+      x: 0,
+      y: -Math.PI/2.5,
+      z: 0,
+    },
+  },
 };
+
+//lights
+var lights={
+  light0:{
+    type:"ambient",
+    color:"0xffffff",
+    intensity:1
+    },
+    light1:{
+      type:"directional",
+      color:"0xffffff",
+      intensity:1,
+      castShadow:true,
+      position:{
+        x:1,
+        y:1,
+        z:1
+      }
+    },
+    light2:{
+
+    }
+  }
+
+var textures={
+  road:{
+    normal:"",
+    bump:"",
+
+  }
+}
 
 // Meshes index
 var meshes = [];
@@ -220,9 +415,8 @@ function init() {
   loadingManager.onProgress = function (item, loaded, total) {
     //loading sceen on progress
     loadingScreen.scene.remove(loadingScreen.box);
-    loadingScreen.box.position.x-=0.01;
     loadingScreen.box.scale.x+=0.05;
-    console.log(loadingScreen.box);
+    console.log(item, loaded, total);
     loadingScreen.scene.add(loadingScreen.box)
   };
 
@@ -231,16 +425,16 @@ function init() {
     onResourcesLoad();
   };
   //choosing default renderer
-  renderer = new THREE.WebGLRenderer({ antialias: ANTI_ALIAS });
+  renderer = new THREE.WebGLRenderer({ antialias: ANTI_ALIAS,alpha:ALPHA});
 
   //kinda bg color
-  renderer.setClearColor("#fed8b1");
+  renderer.setClearColor(0xffffff, 0);
 
   //LIGHTS
   const aLight = new THREE.AmbientLight(0xffffff, 0.9);
   scene.add(aLight);
   const dLight = new THREE.PointLight(0xffffff, 0.8);
-  dLight.position.set(30, 100, -10);
+  dLight.position.set(3,30, -1);
   dLight.castShadow = true;
   scene.add(dLight);
 
@@ -249,13 +443,38 @@ function init() {
   //ground plane
   var gPlaneGeometry = new THREE.PlaneGeometry(200, 500, 400, 100);
   var gPlaneMaterial = new THREE.MeshBasicMaterial({
-    color: 0xe6cfbf,
+    // color: 0xe6cfbf,
+    color:0x90ee90,
     side: THREE.DoubleSide,
     wireframe: WIRE_FRAME,
   });
   gPlane = new THREE.Mesh(gPlaneGeometry, gPlaneMaterial);
   gPlane.rotation.set(Math.PI / 2, 0, 0);
   gPlane.receiveShadow = true;
+  var roadGeometry = new THREE.PlaneGeometry(8, 120, 400, 100);
+  var roadMaterial = new THREE.MeshBasicMaterial({
+    // color: 0xe6cfbf,
+    color:0x846870,
+    side: THREE.DoubleSide,
+    wireframe: WIRE_FRAME,
+  });
+  road0 = new THREE.Mesh(roadGeometry, roadMaterial);
+  road0.position.set(0,0.1,0);
+  road0.rotation.set(Math.PI / 2, 0, 0);
+  road0.receiveShadow = true;
+  scene.add(road0);
+
+  road1 = new THREE.Mesh(roadGeometry, roadMaterial);
+  road1.position.set(1-skillProjectDistanceX,0.1,0);
+  road1.rotation.set(Math.PI / 2, 0, 0);
+  road1.receiveShadow = true;
+  scene.add(road1);
+
+  road2 = new THREE.Mesh(roadGeometry, roadMaterial);
+  road2.position.set(0,0.1,0);
+  road2.rotation.set(Math.PI / 2,0, Math.PI/2);
+  road2.receiveShadow = true;
+  scene.add(road2);
 
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.shadowMap.enabled = SHADOW_MAP;
@@ -335,13 +554,13 @@ function onResourcesLoad() {
       size: txtObjects[key].size,
       height: txtObjects[key].height,
     });
-    let txt_mat = new THREE.MeshPhongMaterial({
-      color: 0xeeeeee,
+    let txt_mat = new THREE.MeshStandardMaterial({
+      color: 0xaaaaaa,
       wireframe: false,
     });
     meshes[key] = new THREE.Mesh(txtgeometry, txt_mat);
     meshes[key].position.set(
-      txtObjects[key].position.x,
+      txtObjects[key].position.x-2,
       txtObjects[key].position.y,
       txtObjects[key].position.z
     );
@@ -414,7 +633,7 @@ function animate() {
   cameraCarGroup.position.z -= carSpeed * Math.cos(cameraCarGroup.rotation.y);
   cameraCarGroup.position.x -= carSpeed * Math.sin(cameraCarGroup.rotation.y);
 
-  if (keyboard[82]) {
+  if (keyboard[82]&&drivingStatus) {
     //R key to reset
     if (drivingStatus) {
       carSpeed = 0;
@@ -423,6 +642,18 @@ function animate() {
       cameraCarGroup.position.set(dxP, dyP, dzP);
       cameraCarGroup.rotation.y = dyR;
     }
+  }
+
+  if(keyboard[13]){
+    // for(let key in txtObjects){
+    //   console.log(txtObjects[key].position);
+    //   console.log(cameraCarGroup.position);
+    //   if((meshes["car"].position.z<txtObjects[key].position.z+2&&meshes["car"].position.z>txtObjects[key].position.z-2)&&meshes["car"].position.x==txtObjects[key].position.x){
+    //     window.open(txtObjects[key].url)
+    //   }
+    // }
+    keyboard[13]=false;
+    window.open(txtObjects.covisuals.url);
   }
   renderer.render(scene, camera);
 }
