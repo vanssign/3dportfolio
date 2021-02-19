@@ -5,7 +5,7 @@ let keyboard = [];
 const WIRE_FRAME = false;
 const ANTI_ALIAS = true;
 const SHADOW_MAP = true;
-const ALPHA=true;
+const ALPHA = true;
 
 var cameraCarGroup;
 
@@ -46,10 +46,10 @@ var models = {
     mtl: "../models/low_poly_tree/Lowpoly_tree_sample.mtl",
     mesh: null,
   },
-  woodenSign:{
-    obj:"../models/Wooden Sign by groch/Meshes/Wooden_Sign_LowPoly_OBJ.obj",
-    mtl:"../models/Wooden Sign by groch/Meshes/Wooden_Sign_LowPoly_OBJ.mtl",
-    mesh:null,
+  woodenSign: {
+    obj: "../models/Wooden Sign by groch/Meshes/Wooden_Sign_LowPoly_OBJ.obj",
+    mtl: "../models/Wooden Sign by groch/Meshes/Wooden_Sign_LowPoly_OBJ.mtl",
+    mesh: null,
   },
 };
 
@@ -61,12 +61,12 @@ var fonts = {
   },
 };
 
-let skillProjectDistanceX=25;
-let desriptionTitleDistanceZ=8;
+let skillProjectDistanceX = 25;
+let desriptionTitleDistanceZ = 8;
 //txt Objects
 var txtObjects = {
-  skills:{
-    text:"SKILLS",
+  skills: {
+    text: "SKILLS",
     size: 1,
     height: 0.25,
     color: 0xeeeeee,
@@ -77,12 +77,12 @@ var txtObjects = {
     },
     rotation: {
       x: 0,
-      y: Math.PI/7,
+      y: Math.PI / 7,
       z: 0,
     },
   },
-  react:{
-    text:"REACTJS",
+  react: {
+    text: "REACTJS",
     size: 0.5,
     height: 0.25,
     color: 0xaaaaaa,
@@ -93,12 +93,12 @@ var txtObjects = {
     },
     rotation: {
       x: 0,
-      y: Math.PI/7,
+      y: Math.PI / 7,
       z: 0,
-    }
+    },
   },
-  node:{
-    text:"NODEJS",
+  node: {
+    text: "NODEJS",
     size: 0.5,
     height: 0.25,
     color: 0xaaaaaa,
@@ -109,12 +109,12 @@ var txtObjects = {
     },
     rotation: {
       x: 0,
-      y: Math.PI/7,
+      y: Math.PI / 7,
       z: 0,
-    }
+    },
   },
-  three:{
-    text:"THREEJS",
+  three: {
+    text: "THREEJS",
     size: 0.5,
     height: 0.25,
     color: 0xaaaaaa,
@@ -125,12 +125,12 @@ var txtObjects = {
     },
     rotation: {
       x: 0,
-      y: Math.PI/7,
+      y: Math.PI / 7,
       z: 0,
-    }
+    },
   },
-  mongodb:{
-    text:"MONGODB",
+  mongodb: {
+    text: "MONGODB",
     size: 0.5,
     height: 0.25,
     color: 0xffffff,
@@ -141,92 +141,188 @@ var txtObjects = {
     },
     rotation: {
       x: 0,
-      y: Math.PI/7,
+      y: Math.PI / 7,
       z: 0,
-    }
+    },
   },
-  projects:{
-    text:"PROJECTS",
+  projects: {
+    text: "PROJECTS",
     size: 1,
     height: 0.25,
     color: 0xeeeeee,
     position: {
-      x: -5.5-skillProjectDistanceX,
+      x: -5.5 - skillProjectDistanceX,
       y: 0.25,
       z: -7,
     },
     rotation: {
       x: 0,
-      y: Math.PI/7,
+      y: Math.PI / 7,
       z: 0,
     },
   },
-  covisuals:{
-    text:"COVID VISUALS",
-    subtext:"A react PWA with redux\narchitecture for latest covid\nstats in form of graphs\n and latest news",
+  covisuals: {
+    text: "COVID VISUALS",
+    subtext:
+      "A react PWA with redux\narchitecture for latest covid\nstats in form of graphs\n and latest news",
     size: 0.5,
     height: 0.25,
     color: 0xaaaaaa,
     position: {
-      x: -5-skillProjectDistanceX,
+      x: -5 - skillProjectDistanceX,
       // y: 0.25+1+1+1+0.25,
-      y:0.25,
+      y: 0.25,
       z: -12,
     },
     rotation: {
       x: 0,
-      y: Math.PI/7,
+      y: Math.PI / 7,
       z: 0,
     },
-    url:"https://vanssign.github.io/covid-visuals/"
   },
-  ushotify:{
-    text:"uShotify",
-    subtext:"",
+  ushotify: {
+    text: "uShotify",
+    subtext: "",
     size: 0.5,
     height: 0.25,
     color: 0xaaaaaa,
     position: {
-      x: -5 -skillProjectDistanceX,
+      x: -5 - skillProjectDistanceX,
       y: 0.25,
-      z: -15,
+      z: -17,
     },
     rotation: {
       x: 0,
-      y: Math.PI/7,
+      y: Math.PI / 7,
       z: 0,
-    }
-  },
-  thehealingartist:{
-    text:"THE HEALING ARTIST",
-    size: 0.5,
-    height: 0.25,
-    color: 0xaaaaaa,
-    position: {
-      x: -5-skillProjectDistanceX,
-      y: 0.25,
-      z: -18,
     },
-    rotation: {
-      x: 0,
-      y: Math.PI/7,
-      z: 0,
-    }
   },
-  tiptap:{
-    text:"TIPTAP",
+  tiptap: {
+    text: "TIPTAP",
     size: 0.5,
     height: 0.25,
     color: 0xffffff,
     position: {
-      x: -5.5-skillProjectDistanceX,
+      x: -5.5 - skillProjectDistanceX,
       y: 0.25,
-      z: -21,
+      z: -22,
     },
     rotation: {
       x: 0,
-      y: Math.PI/7,
+      y: Math.PI / 7,
       z: 0,
+    },
+  },
+
+  thehealingartist: {
+    text: "THE HEALING ARTIST",
+    size: 0.5,
+    height: 0.25,
+    color: 0xaaaaaa,
+    position: {
+      x: -5 - skillProjectDistanceX,
+      y: 0.25,
+      z: -27,
+    },
+    rotation: {
+      x: 0,
+      y: Math.PI / 7,
+      z: 0,
+    },
+  },
+  instructionTxt:{
+    text:"WASD: move\nR:reset\nEnter:Open the link while\nbeing on white box\nin front of project name",
+    size: 0.5,
+    height: 0.15,
+    color: 0xaaaaaa,
+    position: {
+      x: 0,
+      y: 6,
+      z: -3,
+    },
+    rotation: {
+      x: 0,
+      y: 0,
+      z: 0,
+    },
+  }
+};
+
+var linkBoxes = {
+  covisuals: {
+    url: "https://vanssign.github.io/covid-visuals",
+    position: {
+      x: -5 - skillProjectDistanceX,
+      // y: 0.25+1+1+1+0.25,
+      y: 0.25,
+      z: -11,
+    },
+    dimensions:{
+      x:4,
+      y:0.0125,
+      z:2.5
+    },
+    rotation:{
+      x:0,
+      y:Math.PI / 7,
+      z:0
+    }
+  },
+  ushotify: {
+    url: "https://ushotify.herokuapp.com",
+    position: {
+      x: -5 - skillProjectDistanceX,
+      // y: 0.25+1+1+1+0.25,
+      y: 0.25,
+      z: -16,
+    },
+    dimensions:{
+      x:4,
+      y:0.0125,
+      z:2.5
+    },
+    rotation:{
+      x:0,
+      y:Math.PI / 7,
+      z:0
+    }
+  },
+  tiptap: {
+    url: "https://tiptap-es.herokuapp.com",
+    position: {
+      x: -5 - skillProjectDistanceX,
+      // y: 0.25+1+1+1+0.25,
+      y: 0.25,
+      z: -21,
+    },
+    dimensions:{
+      x:4,
+      y:0.0125,
+      z:2.5
+    },
+    rotation:{
+      x:0,
+      y:Math.PI / 7,
+      z:0
+    }
+  },
+  thehealingartist: {
+    url: "https://thehealingartist.in",
+    position: {
+      x: -5 - skillProjectDistanceX,
+      // y: 0.25+1+1+1+0.25,
+      y: 0.25,
+      z: -26,
+    },
+    dimensions:{
+      x:4,
+      y:0.0125,
+      z:2.5
+    },
+    rotation:{
+      x:0,
+      y:Math.PI / 7,
+      z:0
     }
   },
 };
@@ -337,42 +433,39 @@ var modelObjects = {
     },
     rotation: {
       x: 0,
-      y: -Math.PI/2.5,
+      y: -Math.PI / 2.5,
       z: 0,
     },
   },
 };
 
 //lights
-var lights={
-  light0:{
-    type:"ambient",
-    color:"0xffffff",
-    intensity:1
-    },
-    light1:{
-      type:"directional",
-      color:"0xffffff",
-      intensity:1,
-      castShadow:true,
-      position:{
-        x:1,
-        y:1,
-        z:1
-      }
-    },
-    light2:{
+// var lights = {
+//   light0: {
+//     type: "ambient",
+//     color: "0xffffff",
+//     intensity: 1,
+//   },
+//   light1: {
+//     type: "directional",
+//     color: "0xffffff",
+//     intensity: 1,
+//     castShadow: true,
+//     position: {
+//       x: 1,
+//       y: 1,
+//       z: 1,
+//     },
+//   },
+//   light2: {},
+// };
 
-    }
-  }
-
-var textures={
-  road:{
-    normal:"",
-    bump:"",
-
-  }
-}
+// var textures = {
+//   road: {
+//     normal: "",
+//     bump: "",
+//   },
+// };
 
 // Meshes index
 var meshes = [];
@@ -415,9 +508,9 @@ function init() {
   loadingManager.onProgress = function (item, loaded, total) {
     //loading sceen on progress
     loadingScreen.scene.remove(loadingScreen.box);
-    loadingScreen.box.scale.x+=0.05;
+    loadingScreen.box.scale.x += 0.05;
     console.log(item, loaded, total);
-    loadingScreen.scene.add(loadingScreen.box)
+    loadingScreen.scene.add(loadingScreen.box);
   };
 
   loadingManager.onLoad = function () {
@@ -425,7 +518,7 @@ function init() {
     onResourcesLoad();
   };
   //choosing default renderer
-  renderer = new THREE.WebGLRenderer({ antialias: ANTI_ALIAS,alpha:ALPHA});
+  renderer = new THREE.WebGLRenderer({ antialias: ANTI_ALIAS, alpha: ALPHA });
 
   //kinda bg color
   renderer.setClearColor(0xffffff, 0);
@@ -434,7 +527,7 @@ function init() {
   const aLight = new THREE.AmbientLight(0xffffff, 0.9);
   scene.add(aLight);
   const dLight = new THREE.PointLight(0xffffff, 0.8);
-  dLight.position.set(3,30, -1);
+  dLight.position.set(3, 30, -1);
   dLight.castShadow = true;
   scene.add(dLight);
 
@@ -444,7 +537,7 @@ function init() {
   var gPlaneGeometry = new THREE.PlaneGeometry(200, 500, 400, 100);
   var gPlaneMaterial = new THREE.MeshBasicMaterial({
     // color: 0xe6cfbf,
-    color:0x90ee90,
+    color: 0x90ee90,
     side: THREE.DoubleSide,
     wireframe: WIRE_FRAME,
   });
@@ -454,27 +547,42 @@ function init() {
   var roadGeometry = new THREE.PlaneGeometry(8, 120, 400, 100);
   var roadMaterial = new THREE.MeshBasicMaterial({
     // color: 0xe6cfbf,
-    color:0x846870,
+    color: 0x846870,
     side: THREE.DoubleSide,
     wireframe: WIRE_FRAME,
   });
   road0 = new THREE.Mesh(roadGeometry, roadMaterial);
-  road0.position.set(0,0.1,0);
+  road0.position.set(0, 0.1, 0);
   road0.rotation.set(Math.PI / 2, 0, 0);
   road0.receiveShadow = true;
   scene.add(road0);
 
   road1 = new THREE.Mesh(roadGeometry, roadMaterial);
-  road1.position.set(1-skillProjectDistanceX,0.1,0);
+  road1.position.set(1 - skillProjectDistanceX, 0.1, 0);
   road1.rotation.set(Math.PI / 2, 0, 0);
   road1.receiveShadow = true;
   scene.add(road1);
 
   road2 = new THREE.Mesh(roadGeometry, roadMaterial);
-  road2.position.set(0,0.1,0);
-  road2.rotation.set(Math.PI / 2,0, Math.PI/2);
+  road2.position.set(0, 0.1, 0);
+  road2.rotation.set(Math.PI / 2, 0, Math.PI / 2);
   road2.receiveShadow = true;
   scene.add(road2);
+
+  //create linkBoxes
+  for (key in linkBoxes) {
+    var linkBoxGeometry = new THREE.BoxGeometry(linkBoxes[key].dimensions.x, linkBoxes[key].dimensions.y, linkBoxes[key].dimensions.z, 5);
+    var linkBoxMaterial = new THREE.MeshBasicMaterial({
+      // color: 0xe6cfbf,
+      color: 0xffffff,
+      side: THREE.DoubleSide,
+      wireframe: WIRE_FRAME,
+    });
+    var linkBox=new THREE.Mesh(linkBoxGeometry,linkBoxMaterial);
+    linkBox.position.set(linkBoxes[key].position.x,linkBoxes[key].position.y,linkBoxes[key].position.z);
+    linkBox.rotation.set(linkBoxes[key].rotation.x,linkBoxes[key].rotation.y,linkBoxes[key].rotation.z);
+    scene.add(linkBox);
+  }
 
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.shadowMap.enabled = SHADOW_MAP;
@@ -555,12 +663,12 @@ function onResourcesLoad() {
       height: txtObjects[key].height,
     });
     let txt_mat = new THREE.MeshStandardMaterial({
-      color: 0xaaaaaa,
+      color: 0xffffff,
       wireframe: false,
     });
     meshes[key] = new THREE.Mesh(txtgeometry, txt_mat);
     meshes[key].position.set(
-      txtObjects[key].position.x-2,
+      txtObjects[key].position.x - 2,
       txtObjects[key].position.y,
       txtObjects[key].position.z
     );
@@ -578,7 +686,7 @@ function animate() {
   if (RESOURCES_LOADED == false) {
     requestAnimationFrame(animate);
     renderer.render(loadingScreen.scene, loadingScreen.camera);
-    return
+    return;
   }
   requestAnimationFrame(animate);
 
@@ -633,7 +741,7 @@ function animate() {
   cameraCarGroup.position.z -= carSpeed * Math.cos(cameraCarGroup.rotation.y);
   cameraCarGroup.position.x -= carSpeed * Math.sin(cameraCarGroup.rotation.y);
 
-  if (keyboard[82]&&drivingStatus) {
+  if (keyboard[82] && drivingStatus) {
     //R key to reset
     if (drivingStatus) {
       carSpeed = 0;
@@ -644,16 +752,20 @@ function animate() {
     }
   }
 
-  if(keyboard[13]){
-    // for(let key in txtObjects){
-    //   console.log(txtObjects[key].position);
-    //   console.log(cameraCarGroup.position);
-    //   if((meshes["car"].position.z<txtObjects[key].position.z+2&&meshes["car"].position.z>txtObjects[key].position.z-2)&&meshes["car"].position.x==txtObjects[key].position.x){
-    //     window.open(txtObjects[key].url)
-    //   }
-    // }
-    keyboard[13]=false;
-    window.open(txtObjects.covisuals.url);
+  if (keyboard[13]) {
+    for (let key in linkBoxes) {
+      console.log(cameraCarGroup.position);
+      console.log(linkBoxes[key]);
+      if (
+        cameraCarGroup.position.z  < linkBoxes[key].position.z + linkBoxes[key].dimensions.z/2 &&
+        cameraCarGroup.position.z > linkBoxes[key].position.z - linkBoxes[key].dimensions.z/2 &&
+        cameraCarGroup.position.x < linkBoxes[key].position.x + linkBoxes[key].dimensions.x/2 &&
+        cameraCarGroup.position.x > linkBoxes[key].position.x - linkBoxes[key].dimensions.x/2
+      ) {
+        keyboard[13] = false;
+        window.open(linkBoxes[key].url);
+      }
+    }
   }
   renderer.render(scene, camera);
 }
@@ -679,3 +791,4 @@ window.addEventListener("keyup", keyup);
 
 init();
 animate();
+
