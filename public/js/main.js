@@ -51,6 +51,16 @@ var models = {
     mtl: "../models/Wooden Sign by groch/Meshes/Wooden_Sign_LowPoly_OBJ.mtl",
     mesh: null,
   },
+  postbox: {
+    obj: "../models/postbox/Postbox.obj",
+    mtl: "../models/postbox/Postbox.mtl",
+    mesh: null,
+  },
+  cat: {
+    obj: "../models/cat/cat.obj",
+    mtl: "../models/cat/cat.mtl",
+    mesh: null,
+  },
 };
 
 //fonts index
@@ -231,21 +241,37 @@ var txtObjects = {
     },
   },
   instructionTxt:{
-    text:"WASD: move\nR:reset\nEnter:Open the link while\nbeing on white box\nin front of project name",
+    text:"WASD: Move\nR: Reset\nEnter: Open the link\nwhen on white box",
     size: 0.5,
     height: 0.15,
     color: 0xaaaaaa,
     position: {
       x: 0,
       y: 6,
-      z: -3,
+      z: -4,
     },
     rotation: {
       x: 0,
       y: 0,
       z: 0,
     },
-  }
+  },
+  name:{
+    text:"VANSH SINGH",
+    size: 0.5,
+    height: 0.15,
+    color: 0xaaaaaa,
+    position: {
+      x: 0,
+      y: 0.25,
+      z: 2.5,
+    },
+    rotation: {
+      x: 0,
+      y: 0,
+      z: 0,
+    },
+  },
 };
 
 var linkBoxes = {
@@ -325,10 +351,86 @@ var linkBoxes = {
       z:0
     }
   },
+  mailMe:{
+    url: "mailto:thindvansh1999@gmail.com",
+    position: {
+      x: 6,
+      // y: 0.25+1+1+1+0.25,
+      y: 0.25,
+      z: -2.5,
+    },
+    dimensions:{
+      x:4,
+      y:0.0125,
+      z:2.5
+    },
+    rotation:{
+      x:0,
+      y:0,
+      z:0
+    }
+  },
+  github:{
+    url: "https://github.com/vanssign",
+    position: {
+      x: 2.5,
+      y: 0.25,
+      z: -12,
+    },
+    dimensions:{
+      x:3,
+      y:0.0125,
+      z:4
+    },
+    rotation:{
+      x:0,
+      y:0,
+      z:0
+    }
+  },
+  
 };
 
 //Model objects
 var modelObjects = {
+  cat0: {
+    model: "cat",
+    scale: {
+      x: 0.05,
+      y: 0.05,
+      z: 0.05,
+    },
+    position: {
+      x:5,
+      // y: 0.25+1+1+1+0.25,
+      y: 0,
+      z: -12,
+    },
+    rotation: {
+      x: 0,
+      y: 0,
+      z: 0,
+    },
+  },
+  postbox0: {
+    model: "postbox",
+    scale: {
+      x: 17,
+      y: 17,
+      z: 17,
+    },
+    position: {
+      x:6,
+      // y: 0.25+1+1+1+0.25,
+      y: 0,
+      z: -5,
+    },
+    rotation: {
+      x: 0,
+      y: 0,
+      z: 0,
+    },
+  },
   tree0: {
     model: "tree",
     scale: {
@@ -544,6 +646,7 @@ function init() {
   gPlane = new THREE.Mesh(gPlaneGeometry, gPlaneMaterial);
   gPlane.rotation.set(Math.PI / 2, 0, 0);
   gPlane.receiveShadow = true;
+  scene.add(gPlane);
   var roadGeometry = new THREE.PlaneGeometry(8, 120, 400, 100);
   var roadMaterial = new THREE.MeshBasicMaterial({
     // color: 0xe6cfbf,
@@ -571,12 +674,12 @@ function init() {
 
   //create linkBoxes
   for (key in linkBoxes) {
-    var linkBoxGeometry = new THREE.BoxGeometry(linkBoxes[key].dimensions.x, linkBoxes[key].dimensions.y, linkBoxes[key].dimensions.z, 5);
+    var linkBoxGeometry = new THREE.BoxGeometry(linkBoxes[key].dimensions.x, linkBoxes[key].dimensions.y+0.20, linkBoxes[key].dimensions.z, 1);
     var linkBoxMaterial = new THREE.MeshBasicMaterial({
       // color: 0xe6cfbf,
       color: 0xffffff,
       side: THREE.DoubleSide,
-      wireframe: WIRE_FRAME,
+      wireframe: true,
     });
     var linkBox=new THREE.Mesh(linkBoxGeometry,linkBoxMaterial);
     linkBox.position.set(linkBoxes[key].position.x,linkBoxes[key].position.y,linkBoxes[key].position.z);
@@ -717,7 +820,6 @@ function animate() {
       drivingStatus = true;
       meshes["car"].rotation.x = dxR;
       meshes["car"].rotation.y = dyR + Math.PI;
-      scene.add(gPlane);
     }
     if (keyboard[87]) {
       //W key
@@ -746,7 +848,6 @@ function animate() {
     if (drivingStatus) {
       carSpeed = 0;
       drivingStatus = !drivingStatus;
-      scene.remove(gPlane);
       cameraCarGroup.position.set(dxP, dyP, dzP);
       cameraCarGroup.rotation.y = dyR;
     }
@@ -791,4 +892,3 @@ window.addEventListener("keyup", keyup);
 
 init();
 animate();
-
