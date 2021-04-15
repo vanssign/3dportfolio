@@ -34,45 +34,9 @@ let configs = {
   },
 };
 
-// Models index
-var models = {
-  car: {
-    obj: "../models/Chevrolet_Camaro_SS_Low.obj",
-    mtl: "../models/Chevrolet_Camaro_SS_Low.mtl",
-    mesh: null,
-  },
-  tree: {
-    obj: "../models/low_poly_tree/Lowpoly_tree_sample.obj",
-    mtl: "../models/low_poly_tree/Lowpoly_tree_sample.mtl",
-    mesh: null,
-  },
-  woodenSign: {
-    obj: "../models/Wooden Sign by groch/Meshes/Wooden_Sign_LowPoly_OBJ.obj",
-    mtl: "../models/Wooden Sign by groch/Meshes/Wooden_Sign_LowPoly_OBJ.mtl",
-    mesh: null,
-  },
-  postbox: {
-    obj: "../models/postbox/Postbox.obj",
-    mtl: "../models/postbox/Postbox.mtl",
-    mesh: null,
-  },
-  cat: {
-    obj: "../models/cat/cat.obj",
-    mtl: "../models/cat/cat.mtl",
-    mesh: null,
-  },
-};
-
-//fonts index
-var fonts = {
-  optimerRegular: {
-    json: "../fonts/optimer_regular.typeface.json",
-    mesh: null,
-  },
-};
-
 let skillProjectDistanceX = 25;
 let desriptionTitleDistanceZ = 8;
+
 //txt Objects
 var txtObjects = {
   skills: {
@@ -172,7 +136,7 @@ var txtObjects = {
     },
   },
   covisuals: {
-    text: "COVID VISUALS",
+    text: "COVISUALS",
     subtext:
       "A react PWA with redux\narchitecture for latest covid\nstats in form of graphs\n and latest news",
     size: 0.5,
@@ -191,7 +155,7 @@ var txtObjects = {
     },
   },
   ushotify: {
-    text: "uShotify",
+    text: "USHOTIFY",
     subtext: "",
     size: 0.5,
     height: 0.25,
@@ -224,6 +188,22 @@ var txtObjects = {
     },
   },
 
+  dacincieditor: {
+    text: "DAVINCI",
+    size: 0.5,
+    height: 0.25,
+    color: 0xaaaaaa,
+    position: {
+      x: -5 - skillProjectDistanceX,
+      y: 0.25,
+      z: -27.5,
+    },
+    rotation: {
+      x: 0,
+      y: Math.PI / 7,
+      z: 0,
+    },
+  },
   thehealingartist: {
     text: "THE HEALING ARTIST",
     size: 0.5,
@@ -232,7 +212,7 @@ var txtObjects = {
     position: {
       x: -5 - skillProjectDistanceX,
       y: 0.25,
-      z: -27,
+      z: -32,
     },
     rotation: {
       x: 0,
@@ -241,14 +221,30 @@ var txtObjects = {
     },
   },
   instructionTxt:{
-    text:"WASD: Move\nR: Reset\nEnter: Open the link\nwhen on white box",
-    size: 0.5,
-    height: 0.15,
+    text:"WASD: Move\nR: Reset\nEnter: Interact with white box",
+    size: 0.4,
+    height: 0.05,
     color: 0xaaaaaa,
     position: {
       x: 0,
       y: 6,
       z: -4,
+    },
+    rotation: {
+      x: 0,
+      y: 0,
+      z: 0,
+    },
+  },
+  navigationTxt:{
+    text:" <<PROJECTS",
+    size: 0.4,
+    height: 0.01,
+    color: 0xaaaaaa,
+    position: {
+      x: -7,
+      y: 2,
+      z: -1,
     },
     rotation: {
       x: 0,
@@ -332,13 +328,32 @@ var linkBoxes = {
       z:0
     }
   },
+  davicnipaints: {
+    url: "https://davincipaints.vercel.app",
+    position: {
+      x: -5 - skillProjectDistanceX,
+      // y: 0.25+1+1+1+0.25,
+      y: 0.25,
+      z: -26,
+    },
+    dimensions:{
+      x:4,
+      y:0.0125,
+      z:2.5
+    },
+    rotation:{
+      x:0,
+      y:Math.PI / 7,
+      z:0
+    }
+  },
   thehealingartist: {
     url: "https://thehealingartist.in",
     position: {
       x: -5 - skillProjectDistanceX,
       // y: 0.25+1+1+1+0.25,
       y: 0.25,
-      z: -26,
+      z: -31,
     },
     dimensions:{
       x:4,
@@ -521,24 +536,60 @@ var modelObjects = {
       z: 0,
     },
   },
-  woodenSign0: {
-    model: "woodenSign",
+  tree5: {
+    model: "tree",
     scale: {
-      x: 1.5,
-      y: 1.5,
-      z: 1.5,
+      x: 0.5,
+      y: 0.5,
+      z: 0.5,
     },
     position: {
-      x: -4,
+      x: -15,
       y: 0,
-      z: -4,
+      z: -45,
     },
     rotation: {
       x: 0,
-      y: -Math.PI / 2.5,
+      y: Math.PI ,
       z: 0,
     },
   },
+  tree6: {
+    model: "tree",
+    scale: {
+      x: 0.9,
+      y: 0.9,
+      z: 0.8,
+    },
+    position: {
+      x: -25,
+      y: 0,
+      z: -50,
+    },
+    rotation: {
+      x: 0,
+      y: Math.PI ,
+      z: 0,
+    },
+  },
+  // woodenSign0: {
+  //   model: "woodenSign",
+  //   scale: {
+  //     x: 1.5,
+  //     y: 1.5,
+  //     z: 1.5,
+  //   },
+  //   position: {
+  //     x: -4,
+  //     y: 0,
+  //     z: -4,
+  //   },
+  //   rotation: {
+  //     x: 0,
+  //     y: -Math.PI / 2.5,
+  //     z: 0,
+  //   },
+  // },
 };
 
 //lights
@@ -672,14 +723,20 @@ function init() {
   road2.receiveShadow = true;
   scene.add(road2);
 
+  road2 = new THREE.Mesh(roadGeometry, roadMaterial);
+  road2.position.set(0, 0.1, -40);
+  road2.rotation.set(Math.PI / 2, 0, Math.PI / 2);
+  road2.receiveShadow = true;
+  scene.add(road2);
+
+
   //create linkBoxes
   for (key in linkBoxes) {
     var linkBoxGeometry = new THREE.BoxGeometry(linkBoxes[key].dimensions.x, linkBoxes[key].dimensions.y+0.20, linkBoxes[key].dimensions.z, 1);
     var linkBoxMaterial = new THREE.MeshBasicMaterial({
-      // color: 0xe6cfbf,
-      color: 0xffffff,
+      color: 0xe6cfbf,
       side: THREE.DoubleSide,
-      wireframe: true,
+      wireframe: false,
     });
     var linkBox=new THREE.Mesh(linkBoxGeometry,linkBoxMaterial);
     linkBox.position.set(linkBoxes[key].position.x,linkBoxes[key].position.y,linkBoxes[key].position.z);
@@ -766,7 +823,7 @@ function onResourcesLoad() {
       height: txtObjects[key].height,
     });
     let txt_mat = new THREE.MeshStandardMaterial({
-      color: 0xffffff,
+      color: 0xd0d0d0,
       wireframe: false,
     });
     meshes[key] = new THREE.Mesh(txtgeometry, txt_mat);
