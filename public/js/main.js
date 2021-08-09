@@ -633,7 +633,7 @@ let loadingScreen = {
     configs.camera.farClip
   ),
   box: new THREE.Mesh(
-    new THREE.BoxGeometry(10, 0.5, 0, 5),
+    new THREE.CircleGeometry(5,32),
     new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: false })
   ),
 };
@@ -652,7 +652,7 @@ function init() {
     configs.camera.farClip
   );
 
-  loadingScreen.box.position.set(0, 0, 5);
+  loadingScreen.box.position.set(0, 0, 0);
   loadingScreen.camera.lookAt(loadingScreen.box.position);
   loadingScreen.scene.add(loadingScreen.box);
 
@@ -661,7 +661,6 @@ function init() {
   loadingManager.onProgress = function (item, loaded, total) {
     //loading sceen on progress
     loadingScreen.scene.remove(loadingScreen.box);
-    loadingScreen.box.scale.x += 0.05;
     console.log(item, loaded, total);
     loadingScreen.scene.add(loadingScreen.box);
   };
