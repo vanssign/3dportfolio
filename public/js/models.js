@@ -1,4 +1,13 @@
 // Models index
+class Model {
+  constructor(objPath,mtlPath,mesh=null){
+    this.obj=objPath;
+    this.mtl=mtlPath;
+    this.mesh=mesh;
+  }
+}
+
+car1=new Model('../models/Chevrolet_Camaro_SS_Low.obj','../models/Chevrolet_Camaro_SS_Low.mtl');
 var models = {
     car: {
       obj: "../models/Chevrolet_Camaro_SS_Low.obj",

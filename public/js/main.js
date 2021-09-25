@@ -622,7 +622,7 @@ var modelObjects = {
 
 // Meshes index
 var meshes = [];
-
+const loadingContainer=document.getElementById("loadingContainer");
 //loading
 let loadingScreen = {
   scene: new THREE.Scene(),
@@ -631,11 +631,7 @@ let loadingScreen = {
     configs.camera.aspectRatio,
     configs.camera.nearClip,
     configs.camera.farClip
-  ),
-  box: new THREE.Mesh(
-    new THREE.CircleGeometry(5,32),
-    new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: false })
-  ),
+  )
 };
 let loadingManager = null;
 let RESOURCES_LOADED = false;
@@ -652,21 +648,17 @@ function init() {
     configs.camera.farClip
   );
 
-  loadingScreen.box.position.set(0, 0, 0);
-  loadingScreen.camera.lookAt(loadingScreen.box.position);
-  loadingScreen.scene.add(loadingScreen.box);
 
   loadingManager = new THREE.LoadingManager();
 
   loadingManager.onProgress = function (item, loaded, total) {
     //loading sceen on progress
-    loadingScreen.scene.remove(loadingScreen.box);
     console.log(item, loaded, total);
-    loadingScreen.scene.add(loadingScreen.box);
   };
 
   loadingManager.onLoad = function () {
     RESOURCES_LOADED = true;
+    loadingContainer.remove();
     onResourcesLoad();
   };
   //choosing default renderer
